@@ -26,7 +26,7 @@ def crear_pedido():
             cantidad=producto['cantidad'],
             precio=producto['precio'],
             id_pedidos=nuevo_pedido.id_pedidos,
-            id_productos=producto['id_productos']
+            id=producto['id']
         )
         db.session.add(nuevo_producto_pedido)
     
@@ -43,7 +43,7 @@ def obtener_pedido(pedido_id):
         return jsonify({"mensaje": "Pedido no encontrado"}), 404
     
     productos = PedidosProductos.query.filter_by(id_pedidos=pedido_id).all()
-    productos_data = [{"id_productos": p.id_productos, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
+    productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
 
     pedido_data = {
         "id_pedido": pedido.id_pedidos,
@@ -64,7 +64,7 @@ def obtener_pedidos_por_usuario():
     
     for pedido in pedidos:
         productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
-        productos_data = [{"id_productos": p.id_productos, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
+        productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
 
         pedidos_data.append({
             "id_pedido": pedido.id_pedidos,
@@ -92,12 +92,12 @@ def agregar_producto_pedido(id_pedido):
     current_user_id = get_jwt_identity()
     pedido = Pedidos.query.filter_by(id_pedidos=id_pedido, id_usuarios=current_user_id).first_or_404()
     data = request.json
-    producto = Productos.query.get_or_404(data['id_productos'])
+    producto = Productos.query.get_or_404(data['id'])
     nuevo_pedido_producto = PedidosProductos(
         cantidad=data['cantidad'],
         precio=producto.precio,
         id_pedidos=id_pedido,
-        id_productos=data['id_productos']
+        id=data['id']
     )
     db.session.add(nuevo_pedido_producto)
     pedido.monto_total += float(nuevo_pedido_producto.cantidad) * float(nuevo_pedido_producto.precio)
@@ -110,7 +110,7 @@ def obtener_productos_pedido(pedido_id):
     current_user_id = get_jwt_identity()
     pedido = Pedidos.query.filter_by(id_pedidos=pedido_id, id_usuarios=current_user_id).first_or_404()
     productos = PedidosProductos.query.filter_by(id_pedidos=pedido_id).all()
-    productos_data = [{"id_productos": p.id_productos, 
+    productos_data = [{"id": p.id, 
                        "cantidad": p.cantidad, 
                        "precio": p.precio} for p in productos]
 
@@ -121,7 +121,7 @@ def obtener_productos_pedido(pedido_id):
 def eliminar_producto_pedido(id_pedido, id_producto):
     current_user_id = get_jwt_identity()
     pedido = Pedidos.query.filter_by(id_pedidos=id_pedido, id_usuarios=current_user_id).first_or_404()
-    pedido_producto = PedidosProductos.query.filter_by(id_pedidos=id_pedido, id_productos=id_producto).first_or_404()
+    pedido_producto = PedidosProductos.query.filter_by(id_pedidos=id_pedido, id=id_producto).first_or_404()
     pedido.monto_total -= float(pedido_producto.cantidad) * float(pedido_producto.precio)
     db.session.delete(pedido_producto)
     db.session.commit()
@@ -132,7 +132,7 @@ def eliminar_producto_pedido(id_pedido, id_producto):
 def actualizar_cantidad_producto_pedido(id_pedido, id_producto):
     current_user_id = get_jwt_identity()
     pedido = Pedidos.query.filter_by(id_pedidos=id_pedido, id_usuarios=current_user_id).first_or_404()
-    pedido_producto = PedidosProductos.query.filter_by(id_pedidos=id_pedido, id_productos=id_producto).first_or_404()
+    pedido_producto = PedidosProductos.query.filter_by(id_pedidos=id_pedido, id=id_producto).first_or_404()
     data = request.json
     nueva_cantidad = data['cantidad']
     

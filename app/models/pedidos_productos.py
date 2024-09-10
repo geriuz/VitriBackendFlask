@@ -12,7 +12,7 @@ class PedidosProductos(Base):
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     fecha_actualizacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     id_pedidos: Mapped[int] = mapped_column(ForeignKey("pedidos.id_pedidos"))
-    id_productos: Mapped[int] = mapped_column(ForeignKey("productos.id_productos"))
+    id: Mapped[int] = mapped_column(ForeignKey("productos.id"))
 
     @hybrid_property
     def total_producto(self):
@@ -32,7 +32,7 @@ class PedidosProductos(Base):
             'fecha_creacion': self.fecha_creacion,
             'fecha_actualizacion': self.fecha_actualizacion,
             'id_pedidos': self.id_pedidos,
-            'id_productos': self.id_productos
+            'id': self.id
         }
 
     def __repr__(self):

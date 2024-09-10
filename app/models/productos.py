@@ -17,7 +17,7 @@ from common.utils.enums.unidad_producto import UnidadProducto
 class Productos(Base):
     __tablename__ = "productos"
 
-    id_productos: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(primary_key=True)
     sku: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     nombre: Mapped[str] = mapped_column(String(255), nullable=False)
     descripcion: Mapped[str] = mapped_column(String(1000))
@@ -51,7 +51,7 @@ class Productos(Base):
 
     def to_dict(self):
         return {
-            "id_productos": self.id_productos,
+            "id": self.id,
             "sku": self.sku,
             "nombre": self.nombre,
             "descripcion": self.descripcion,
