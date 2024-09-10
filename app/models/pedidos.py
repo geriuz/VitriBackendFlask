@@ -1,5 +1,4 @@
-from datetime import datetime, timezone
-from sqlalchemy import Column, Integer, Numeric, String, Boolean, Enum, Float, DateTime, ForeignKey, func
+from sqlalchemy import Integer, Numeric, Enum,  DateTime, ForeignKey, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from common.config.db import Base 
 from common.utils.enums.estado_pedido import EstadoPedido

@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Numeric, String, Boolean, DateTime, func
+from sqlalchemy import Integer, String, Boolean, DateTime, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from common.config.db import Base 
 
@@ -8,9 +8,9 @@ class Categorias(Base):
     id_categorias: Mapped[int] = mapped_column(Integer, primary_key=True)
     nombre: Mapped[str] = mapped_column(String(255), nullable=False)
     url_imagen: Mapped[str] = mapped_column(String(255))
+    is_activo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     fecha_actualizacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
-    is_activo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     
     #----------------------------------------------------------------------------------------------#
     # RELACIONES
@@ -22,6 +22,7 @@ class Categorias(Base):
         return {
             "nombre": self.nombre,
             "url_imagen": self.url_imagen,
+            "is_activo": self.is_activo,
             "fecha_creacion": self.fecha_creacion,
             "fecha_actualizacion": self.fecha_actualizacion
         }

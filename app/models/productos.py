@@ -1,14 +1,4 @@
-from sqlalchemy import (
-    Integer,
-    Numeric,
-    String,
-    Boolean,
-    Enum,
-    Float,
-    DateTime,
-    ForeignKey,
-    func,
-)
+from sqlalchemy import (Integer, Numeric, String, Boolean, Enum, Float, DateTime, ForeignKey, func)
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from common.config.db import Base
 from common.utils.enums.unidad_producto import UnidadProducto

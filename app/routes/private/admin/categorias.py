@@ -24,26 +24,14 @@ def guardar_categorias():
 @role_required([Roles.ADMIN])
 def obtener_categorias():
     categorias = Categorias.query.all()
-    lista_categorias = [{'id_categorias': categoria.id_categorias, 
-                        'nombre': categoria.nombre, 
-                        'url_imagen': categoria.url_imagen,
-                        'fecha_creacion' : categoria.fecha_creacion,
-                        'fecha_actualizacion' : categoria.fecha_actualizacion} 
-                        for categoria in categorias]
-    return jsonify(lista_categorias)
+    return jsonify([categoria.to_dict() for categoria in categorias])
 
 @categorias_admin.get("/api/admin/categorias/<int:id>")
 @jwt_required() 
 @role_required([Roles.ADMIN])
 def obtener_categoria_por_id(id):
-    categoria = Categorias.query.get(id)
-    if not categoria:
-        return jsonify({'message': 'Categoria no encontrada'}), 404
-    return jsonify({'id_categorias': categoria.id_categorias,
-                    'nombre': categoria.nombre,
-                    'url_imagen': categoria.url_imagen,
-                    'fecha_creacion' : categoria.fecha_creacion,
-                    'fecha_actualizacion' : categoria.fecha_actualizacion})
+    categoria = Categorias.query.get_or_404(id, description='Producto no encontrado')
+    return jsonify(categoria.to_dict())
 
 @categorias_admin.patch('/api/admin/categorias/<int:id>')
 @jwt_required() 

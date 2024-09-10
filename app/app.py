@@ -4,10 +4,9 @@ from datetime import timedelta
 from common.config.db import db
 from flask_cors import CORS
 
-from models import Productos, Categorias, Pedidos, PedidosProductos, Pagos, Usuarios  # Importación de los modelos
-
+from models import * # Importación de los modelos
 from routes.public import categorias_public, productos_public # Importación blueprints de rutas publicas
-from routes.private.admin import productos_admin, usuarios_admin, categorias_admin # Importación blueprints de rutas privadas rol admin
+from routes.private.admin import productos_admin, usuarios_admin, categorias_admin, banner_admin # Importación blueprints de rutas privadas rol admin
 from routes.private.user import pedidos_user, usuarios_user # Importación blueprints de rutas privadas rol usuario
 from routes.authentication.autenticacion import autenticacion  # Importación de los Blueprints de autenticación
 
@@ -59,6 +58,7 @@ app.register_blueprint(usuarios_user)
 # Registro de Blueprints rutas de autenticación
 app.register_blueprint(autenticacion)
 
+app.register_blueprint(banner_admin)
 # -------------------------------------------------------------------------------------------------------- #
 # Inicializador de la aplicación
 # -------------------------------------------------------------------------------------------------------- #

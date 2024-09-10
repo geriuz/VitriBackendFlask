@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Numeric, DateTime, Enum, String, ForeignKey, func
+from sqlalchemy import Integer, Numeric, DateTime, Enum, String, func
 from common.utils.enums.metodo_pago import MetodoPago
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from common.config.db import Base 
