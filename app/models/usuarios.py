@@ -45,15 +45,17 @@ class Usuarios(Base):
 
     def to_dict(self):
         return {
-            "nombre": self.nombre,
+            "nombres": self.nombres,
             "apellidos": self.apellidos,
             "email": self.email,
+            "rol": self.rol.name,
             "tipo_identificacion": self.tipo_identificacion.value,
             "identificacion": self.identificacion,
             "telefono": self.telefono,
             "direccion": self.direccion,
             "barrio": self.barrio,
             "ciudad": self.ciudad,
+            "is_activo": self.is_activo,
             "fecha_creacion": self.fecha_creacion,
             "fecha_actualizacion": self.fecha_actualizacion
         }

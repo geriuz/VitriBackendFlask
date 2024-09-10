@@ -52,6 +52,7 @@ class Productos(Base):
     def to_dict(self):
         return {
             "id_productos": self.id_productos,
+            "sku": self.sku,
             "nombre": self.nombre,
             "descripcion": self.descripcion,
             "url_imagen": self.url_imagen,
@@ -61,6 +62,7 @@ class Productos(Base):
             "precio": self.precio,
             "is_promocion": self.is_promocion,
             "stock": self.stock,
+            "is_activo": self.is_activo,
             "descuento": self.descuento,
             "id_categorias": self.id_categorias,
             "id_usuarios": self.id_usuarios,
