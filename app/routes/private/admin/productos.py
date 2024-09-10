@@ -1,9 +1,10 @@
 from flask import Blueprint, jsonify, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from common.utils.auth import role_required
 from common.utils.enums.roles import Roles
 from common.config.db import db
 from models.productos import Productos
+from sqlalchemy.exc import IntegrityError
 
 productos_admin = Blueprint('productos_admin', __name__)
 
@@ -12,108 +13,79 @@ productos_admin = Blueprint('productos_admin', __name__)
 @role_required([Roles.ADMIN])
 def guardar_productos():
     data = request.json
-    nuevo_producto = Productos(sku=data['sku'], 
-                                nombre=data['nombre'], 
-                                descripcion=data['descripcion'], 
-                                url_imagen=data['url_imagen'],
-                                url_ficha_tecnica=data['url_ficha_tecnica'], 
-                                unidad_producto=data['unidad_producto'],
-                                cantidad=data['cantidad'], 
-                                precio=data['precio'], 
-                                is_promocion=data['is_promocion'], 
-                                stock=data['stock'], 
-                                descuento=data['descuento'],
-                                id_categorias=data['id_categorias'], 
-                                id_usuarios=data['id_usuarios'], )
-    db.session.add(nuevo_producto)
-    db.session.commit()
+    try:
+        nuevo_producto = Productos(
+            sku=data['sku'],
+            nombre=data['nombre'],
+            descripcion=data['descripcion'],
+            url_imagen=data['url_imagen'],
+            url_ficha_tecnica=data['url_ficha_tecnica'],
+            unidad_producto=data['unidad_producto'],
+            cantidad=data['cantidad'],
+            precio=data['precio'],
+            is_promocion=data.get('is_promocion', False),
+            stock=data['stock'],
+            descuento=data.get('descuento', 0),
+            id_categorias=data['id_categorias'],
+            id_usuarios=get_jwt_identity(),
+        )
+        db.session.add(nuevo_producto)
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({'message': 'Error: El SKU ya existe'}), 400
+    except KeyError as e:
+        return jsonify({'message': f'Error: Falta el campo {str(e)}'}), 400
+    except ValueError as e:
+        return jsonify({'message': f'Error: {str(e)}'}), 400
 
-    return jsonify({'message': 'Nueva producto creada correctamente'}), 201
+    return jsonify({'message': 'Nuevo producto creado correctamente'}), 201
 
 @productos_admin.get("/api/admin/productos")
 @jwt_required() 
 @role_required([Roles.ADMIN])
 def obtener_productos():
     productos = Productos.query.all()
-    lista_productos = [{'id_productos': producto.id_productos,
-                        'sku': producto.sku,
-                        'nombre': producto.nombre,
-                        'descripcion': producto.descripcion,
-                        'url_imagen': producto.url_imagen,
-                        'url_ficha_tecnica': producto.url_ficha_tecnica,
-                        'unidad_producto': producto.unidad_producto.value,
-                        'cantidad': producto.cantidad,
-                        'precio': producto.precio,
-                        'is_promocion': producto.is_promocion,
-                        'stock': producto.stock,
-                        'descuento': producto.descuento,
-                        'is_activo': producto.is_activo,
-                        'id_categorias': producto.id_categorias,
-                        'id_usuarios': producto.id_usuarios,
-                        'fecha_creacion': producto.fecha_creacion,
-                        'fecha_actualizacion': producto.fecha_actualizacion,
-                        'fecha_inicio_descuento': producto.fecha_inicio_descuento,
-                        'fecha_fin_descuento': producto.fecha_fin_descuento}
-                        for producto in productos]
-    return jsonify(lista_productos)
+    return jsonify([producto.to_dict() for producto in productos])
 
 @productos_admin.get("/api/admin/productos/<int:id>")
 @jwt_required() 
 @role_required([Roles.ADMIN])
 def obtener_producto_por_id(id):
-    producto = Productos.query.get(id)
-    if not producto:
-        return jsonify({'message': 'Producto no encontrada'}), 404
-    return jsonify({'id_productos': producto.id_productos,
-                        'nombre': producto.nombre,
-                        'descripcion': producto.descripcion,
-                        'url_imagen': producto.url_imagen,
-                        'url_ficha_tecnica': producto.url_ficha_tecnica,
-                        'unidad_producto': producto.unidad_producto.value,
-                        'cantidad' : producto.cantidad,
-                        'precio' : producto.precio,
-                        'is_promocion' : producto.is_promocion,
-                        'stock' : producto.stock,
-                        'descuento' : producto.descuento,
-                        'is_activo' : producto.is_activo,
-                        'id_categorias' : producto.id_categorias,
-                        'id_usuarios' : producto.id_usuarios,
-                        'fecha_inicio_descuento' : producto.fecha_inicio_descuento,
-                        'fecha_fin_descuento' : producto.fecha_fin_descuento,
-                        'fecha_creacion' : producto.fecha_creacion,
-                        'fecha_actualizacion' : producto.fecha_actualizacion})
+    producto = Productos.query.get_or_404(id, description='Producto no encontrado')
+    return jsonify(producto.to_dict())
 
 @productos_admin.patch('/api/admin/productos/<int:id>')
 @jwt_required() 
 @role_required([Roles.ADMIN])
 def actualizar_producto(id):
-    producto = Productos.query.get(id)
-    if not producto:
-        return jsonify({'message': 'Producto no encontrada'}), 404
+    producto = Productos.query.get_or_404(id, description='Producto no encontrado')
     data = request.json
-    producto.nombre = data['nombre']
-    producto.descripcion = data['descripcion']
-    producto.url_imagen = data['url_imagen']
-    producto.url_ficha_tecnica = data['url_ficha_tecnica']
-    producto.unidad_producto = data['unidad_producto']
-    producto.cantidad = data['cantidad']
-    producto.precio = data['precio']
-    producto.is_promocion = data['is_promocion']
-    producto.stock = data['stock']
-    producto.descuento = data['descuento']
-    producto.is_activo = data['is_activo']
-    producto.id_categorias = data['id_categorias']
-    producto.id_usuarios = data['id_usuarios']
-    db.session.commit()
-    return jsonify({'message': 'Producto actualizada satisfactoriamente'}), 200
+    campos_permitidos = [
+        'nombre', 'descripcion', 'url_imagen', 'url_ficha_tecnica', 'unidad_producto',
+        'cantidad', 'precio', 'is_promocion', 'stock', 'descuento', 'is_activo',
+        'id_categorias', 'fecha_inicio_descuento', 'fecha_fin_descuento'
+    ]
+    
+    try:
+        for campo in campos_permitidos:
+            if campo in data:
+                setattr(producto, campo, data[campo])
+        
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({'message': 'Error: El SKU ya existe'}), 400
+    except ValueError as e:
+        return jsonify({'message': f'Error: {str(e)}'}), 400
+
+    return jsonify({'message': 'Producto actualizado satisfactoriamente'}), 200
 
 @productos_admin.delete('/api/admin/productos/<int:id>')
 @jwt_required() 
 @role_required([Roles.ADMIN])
 def eliminar_producto(id):
-    producto = Productos.query.get(id)
-    if not producto:
-        return jsonify({'message': 'Producto no encontrada'}), 404
+    producto = Productos.query.get_or_404(id, description='Producto no encontrado')
     db.session.delete(producto)
     db.session.commit()
-    return jsonify({'message': 'La producto ha sido eliminada satisactoriamnete'}), 200
+    return jsonify({'message': 'El producto ha sido eliminado satisfactoriamente'}), 200

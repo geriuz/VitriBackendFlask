@@ -15,7 +15,7 @@ def obtener_categorias():
 
 @categorias_public.get("/api/publico/categorias/<int:id>")
 def obtener_categoria_por_id(id):
-    categoria = Categorias.query.get(id)
+    categoria = Categorias.query.get_or_404(id, description='Categoria no encontrada')
     if not categoria:
         return jsonify({'message': 'Categoria no encontrada'}), 404
     return jsonify({'id_categorias': categoria.id_categorias,

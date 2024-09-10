@@ -35,7 +35,7 @@ def obtener_productos():
 
 @productos_public.get("/api/publico/productos/<int:id>")
 def obtener_producto_por_id(id):
-    producto = Productos.query.get(id)
+    producto = Productos.query.get_or_404(id, description='Producto no encontrado')
     if not producto:
         return jsonify({"message": "Producto no encontrada"}), 404
     return jsonify(
