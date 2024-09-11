@@ -5,9 +5,9 @@ from common.utils.enums.roles import Roles
 from common.config.db import db
 from models.banner import Banner
 
-banner_admin = Blueprint('banner_admin', __name__)
+banner_public = Blueprint('banner_public', __name__)
 
-@banner_admin.get("/api/admin/banner")
+@banner_public.get("/api/publico/banner")
 def obtener_banner():
     banners = Banner.query.all()
     return jsonify([banner.to_dict() for banner in banners])
