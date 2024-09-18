@@ -14,9 +14,8 @@ def crear_pedido():
     
     nuevo_pedido = Pedidos(
         monto_total=data['monto_total'],
-        estado_pedido=EstadoPedido.PENDIENTE,
+        estado_pedido=EstadoPedido.CANCELADO,
         id_usuarios=current_user_id,
-        id_pagos=data['id_pagos']
     )
     db.session.add(nuevo_pedido)
     db.session.commit()

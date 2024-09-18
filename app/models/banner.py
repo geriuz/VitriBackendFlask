@@ -12,7 +12,7 @@ class Banner(Base):
     def to_dict(self):
         return {
             "url_imagen": self.url_imagen,
-            "posicion_y": self.posicion_y
+            "posicion_y": self.posicion_y 
         }
 
     def __repr__(self):

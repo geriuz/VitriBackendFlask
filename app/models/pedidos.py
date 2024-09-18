@@ -8,10 +8,10 @@ class Pedidos(Base):
 
     id_pedidos: Mapped[int] = mapped_column(Integer, primary_key=True)
     monto_total: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
-    estado_pedido: Mapped[EstadoPedido] = mapped_column(Enum(EstadoPedido), values_callable=lambda obj: [e.value for e in obj], nullable=False)
+    estado_pedido: Mapped[EstadoPedido] = mapped_column(Enum(EstadoPedido), nullable=False)
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     id_usuarios: Mapped[int] = mapped_column(ForeignKey("usuarios.id_usuarios"))
-    id_pagos: Mapped[int] = mapped_column(ForeignKey("pagos.id_pagos"))
+    # id_pagos: Mapped[int] = mapped_column(ForeignKey("pagos.id_pagos"))
 
     def obtener_total_precio_pedido(self) -> float:
         return sum(producto.get_total_producto() for producto in self.pedido_productos)
@@ -22,7 +22,7 @@ class Pedidos(Base):
     # Reladcion uno a muchos entre pedidos y productos
     pedidos_productos: Mapped[list["PedidosProductos"]] = relationship(back_populates="pedidos") # type: ignore
     # Reladcion uno a muchos entre pagos y pedidos
-    pagos: Mapped["Pagos"] = relationship(back_populates="pedidos") # type: ignore
+    # pagos: Mapped["Pagos"] = relationship(back_populates="pedidos") # type: ignore
     #----------------------------------------------------------------------------------------------#
 
     def __todict__(self):
