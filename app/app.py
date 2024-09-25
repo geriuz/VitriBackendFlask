@@ -19,7 +19,7 @@ CORS(app)
 # -------------------------------------------------------------------------------------------------------- #
 # Configuración de la conexión de SQLAlchemy a la Base de Datos
 # -------------------------------------------------------------------------------------------------------- #
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:1066@localhost/vitridb3?charset=utf8mb4"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:1066@localhost/vitridb?charset=utf8mb4"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ECHO"] = True  # Habilitar el echo para ver las sentencias SQL
 

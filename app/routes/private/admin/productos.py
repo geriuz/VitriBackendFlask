@@ -43,7 +43,6 @@ def guardar_productos():
 
 @productos_admin.get("/api/admin/productos")
 @jwt_required() 
-@role_required([Roles.ADMIN])
 def obtener_productos():
     productos = Productos.query.all()
     return jsonify([producto.to_dict() for producto in productos])
