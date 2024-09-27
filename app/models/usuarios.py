@@ -45,6 +45,7 @@ class Usuarios(Base):
 
     def to_dict(self):
         return {
+            "id_usuarios": self.id_usuarios,
             "nombres": self.nombres,
             "apellidos": self.apellidos,
             "email": self.email,
