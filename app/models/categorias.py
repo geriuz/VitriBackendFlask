@@ -20,6 +20,7 @@ class Categorias(Base):
 
     def to_dict(self):
         return {
+            "id_categorias": self.id_categorias,
             "nombre": self.nombre,
             "url_imagen": self.url_imagen,
             "is_activo": self.is_activo,
