@@ -1,4 +1,4 @@
-from sqlalchemy import (Integer, Numeric, String, Boolean, Enum, Float, DateTime, ForeignKey, func)
+from sqlalchemy import (Integer, Numeric, String, Boolean, Enum, Float, DateTime, ForeignKey, Date, func)
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from common.config.db import Base
 from common.utils.enums.unidad_producto import UnidadProducto
@@ -20,8 +20,8 @@ class Productos(Base):
     stock: Mapped[int] = mapped_column(Integer, nullable=False)
     is_activo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     descuento: Mapped[float] = mapped_column(Numeric(10, 2))
-    fecha_inicio_descuento: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
-    fecha_fin_descuento: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
+    fecha_inicio_descuento: Mapped[Date] = mapped_column(Date, default=func.now())
+    fecha_fin_descuento: Mapped[Date] = mapped_column(Date, default=func.now())
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     fecha_actualizacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now(), onupdate=func.now())
     id_categorias: Mapped[int] = mapped_column(ForeignKey("categorias.id_categorias"))
