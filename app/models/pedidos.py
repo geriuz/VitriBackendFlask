@@ -9,7 +9,9 @@ class Pedidos(Base):
     id_pedidos: Mapped[int] = mapped_column(Integer, primary_key=True)
     monto_total: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     estado_pedido: Mapped[EstadoPedido] = mapped_column(Enum(EstadoPedido), nullable=False)
+
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
+
     id_usuarios: Mapped[int] = mapped_column(ForeignKey("usuarios.id_usuarios"))
     # id_pagos: Mapped[int] = mapped_column(ForeignKey("pagos.id_pagos"))
 

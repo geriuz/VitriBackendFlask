@@ -33,7 +33,9 @@ class Productos(Base):
     # Reladcion uno a muchos entre usuarios y productos
     usuarios: Mapped["Usuarios"] = relationship(back_populates="productos")  # type: ignore
     # Reladcion uno a muchos entre pedidos_productos y productos
-    pedidos_productos: Mapped[list["PedidosProductos"]] = relationship(back_populates="productos")  # type: ignore # type: ignore
+    pedidos_productos: Mapped[list["PedidosProductos"]] = relationship(back_populates="productos")  # type: ignore
+    entradas: Mapped[list["Entradas"]] = relationship(back_populates="productos")   # type: ignore
+
     # ----------------------------------------------------------------------------------------------#
 
     def set_initial_values(self):

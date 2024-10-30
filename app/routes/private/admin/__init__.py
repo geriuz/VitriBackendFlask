@@ -1,4 +1,5 @@
 from .categorias import categorias_admin
+from .entradas import entradas_admin
 from .productos import productos_admin
 from .usuarios import usuarios_admin
 from .banner import banner_admin

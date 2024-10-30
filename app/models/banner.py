@@ -11,9 +11,10 @@ class Banner(Base):
 
     def to_dict(self):
         return {
+            "id_banner": self.id_banner,
             "url_imagen": self.url_imagen,
             "posicion_y": self.posicion_y 
         }
 
     def __repr__(self):
-        return f'<URLImagen {self.url_imagen!r}, <PosicionY {self.posicion_y!r}>'
+        return f'<IdBanner {self.id_banner!r},<URLImagen {self.url_imagen!r}, <PosicionY {self.posicion_y!r}>'
