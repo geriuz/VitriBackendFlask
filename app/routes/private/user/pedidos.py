@@ -45,7 +45,7 @@ def obtener_pedido(pedido_id):
         return jsonify({"mensaje": "Pedido no encontrado"}), 404
     
     productos = PedidosProductos.query.filter_by(id_pedidos=pedido_id).all()
-    productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
+    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio} for p in productos]
 
     pedido_data = {
         "id_pedido": pedido.id_pedidos,
