@@ -8,6 +8,7 @@ class PedidosProductos(Base):
 
     id_pedidos_productos: Mapped[int] = mapped_column(Integer, primary_key=True)
     cantidad: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+    cantidad_producto: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     precio: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     fecha_actualizacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
@@ -32,6 +33,7 @@ class PedidosProductos(Base):
             'fecha_creacion': self.fecha_creacion,
             'fecha_actualizacion': self.fecha_actualizacion,
             'id_pedidos': self.id_pedidos,
+            'cantidad_producto': self.cantidad_producto,
             'id': self.id
         }
 

@@ -25,6 +25,7 @@ def crear_pedido():
     for producto in data['productos']:
         nuevo_producto_pedido = PedidosProductos(
             cantidad=producto['cantidad'],
+            cantidad_producto=producto['cantidad_producto'],
             precio=producto['precio'],
             id_pedidos=nuevo_pedido.id_pedidos,
             id=producto['id']
@@ -96,6 +97,7 @@ def agregar_producto_pedido(id_pedido):
     producto = Productos.query.get_or_404(data['id'])
     nuevo_pedido_producto = PedidosProductos(
         cantidad=data['cantidad'],
+        cantidad_producto=data['cantidad_producto'],
         precio=producto.precio,
         id_pedidos=id_pedido,
         id=data['id']
