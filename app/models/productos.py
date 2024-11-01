@@ -15,6 +15,7 @@ class Productos(Base):
     url_ficha_tecnica: Mapped[str] = mapped_column(String(255))
     unidad_producto: Mapped[str] = mapped_column(Enum(UnidadProducto, values_callable=lambda obj: [e.value for e in obj]), nullable=False)
     cantidad: Mapped[int] = mapped_column(Integer)
+    max_usuario: Mapped[int] = mapped_column(Integer)
     precio: Mapped[float] = mapped_column(Float, nullable=False)
     is_promocion: Mapped[bool] = mapped_column(Boolean, nullable=False)
     stock: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -51,6 +52,7 @@ class Productos(Base):
             "url_ficha_tecnica": self.url_ficha_tecnica,
             "unidad_producto": self.unidad_producto.value,
             "cantidad": self.cantidad,
+            "max_usuario": self.max_usuario,
             "precio": self.precio,
             "is_promocion": self.is_promocion,
             "stock": self.stock,
@@ -65,4 +67,4 @@ class Productos(Base):
         }
 
     def __repr__(self):
-        return f"<SKU {self.sku!r}>, <Nombre {self.nombre!r}, <URLImagen {self.url_imagen!r}, <URLFichaTecnica {self.url_ficha_tecnica!r}, <UnidadProducto {self.unidad_producto!r}, <Cantidad {self.cantidad!r}, <Precio {self.precio!r},<IsPromocion {self.is_promocion!r},<IsStock {self.stock!r},<IsActivo {self.is_activo!r}, <Descuento {self.descuento!r}, <FechaInicioDescuento {self.fecha_inicio_descuento!r}, <FechaFinDescuento {self.fecha_fin_descuento!r}>"
+        return f"<SKU {self.sku!r}>, <Nombre {self.nombre!r}, <URLImagen {self.url_imagen!r}, <URLFichaTecnica {self.url_ficha_tecnica!r}, <UnidadProducto {self.unidad_producto!r}, <Cantidad {self.cantidad!r}, <MaxUsuario {self.max_usuario!r}, <Precio {self.precio!r},<IsPromocion {self.is_promocion!r},<IsStock {self.stock!r},<IsActivo {self.is_activo!r}, <Descuento {self.descuento!r}, <FechaInicioDescuento {self.fecha_inicio_descuento!r}, <FechaFinDescuento {self.fecha_fin_descuento!r}>"

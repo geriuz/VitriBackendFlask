@@ -22,6 +22,7 @@ def guardar_productos():
             url_ficha_tecnica=data['url_ficha_tecnica'],
             unidad_producto=data['unidad_producto'],
             cantidad=data['cantidad'],
+            max_usuario=data['max_usuario'],
             precio=data['precio'],
             is_promocion=data.get('is_promocion', False),
             stock=data['stock'],
@@ -62,7 +63,7 @@ def actualizar_producto(id):
     data = request.json
     campos_permitidos = [
         'nombre', 'descripcion', 'url_imagen', 'url_ficha_tecnica', 'unidad_producto',
-        'cantidad', 'precio', 'is_promocion', 'stock', 'descuento', 'is_activo',
+        'cantidad', 'max_usuario', 'precio', 'is_promocion', 'stock', 'descuento', 'is_activo',
         'id_categorias', 'fecha_inicio_descuento', 'fecha_fin_descuento'
     ]
     
