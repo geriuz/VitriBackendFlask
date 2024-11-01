@@ -33,6 +33,7 @@ class Pedidos(Base):
             "monto_total": self.monto_total,
             "estado_pedido": self.estado_pedido.name,
             "id_pagos": self.id_pagos,
+            "fecha_creacion": self.fecha_creacion,
             "id_usuarios": self.id_usuarios
         }    
 
