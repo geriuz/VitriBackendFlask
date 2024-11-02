@@ -5,4 +5,4 @@ class UnidadProducto(PyEnum):
     GRAMO = 'GR' 
     LITRO = 'L' 
     MILILITRO = 'ML' 
-    UNIDAD = 'UD'
+    UNIDAD = 'UND' 
