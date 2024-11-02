@@ -181,7 +181,7 @@ def obtener_pedido_por_id(pedido_id):
     
     # Obtener los productos asociados al pedido
     productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
-    productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
+    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio} for p in productos]
 
     # Estructurar la respuesta
     pedido_data = {
