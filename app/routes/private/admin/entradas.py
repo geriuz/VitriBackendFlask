@@ -4,6 +4,7 @@ from common.utils.auth import role_required
 from common.utils.enums.roles import Roles
 from common.config.db import db
 from models.entradas import Entradas
+from models.productos import Productos
 
 entradas_admin = Blueprint('entradas_admin', __name__)
 
@@ -12,14 +13,29 @@ entradas_admin = Blueprint('entradas_admin', __name__)
 @role_required([Roles.ADMIN])
 def guardar_entradas():
     data = request.json
-    nueva_entrada = Entradas(entrada_productos=data['entrada_productos'],
-                             entrada_cantidad=data['entrada_cantidad'],
-                             observacion=data['observacion'],
-                             entrada_usuario=data['entrada_usuario'])
+    
+    # Crear la nueva entrada
+    nueva_entrada = Entradas(
+        entrada_productos=data['entrada_productos'],
+        entrada_cantidad=data['entrada_cantidad'],
+        observacion=data['observacion'],
+        entrada_usuario=data['entrada_usuario']
+    )
     db.session.add(nueva_entrada)
+    
+    # Actualizar el stock del producto relacionado
+    producto = Productos.query.get(data['entrada_productos'])
+    if not producto:
+        return jsonify({'message': 'Producto no encontrado'}), 404
+
+    # Sumar la cantidad de la entrada al stock del producto
+    producto.stock += data['entrada_cantidad']
+    
+    # Guardar todos los cambios en la base de datos
     db.session.commit()
 
-    return jsonify({'message': 'Nueva Entrada creada correctamente'}), 201
+    return jsonify({'message': 'Nueva Entrada creada y stock actualizado correctamente'}), 201
+
 
 @entradas_admin.get("/api/admin/entradas")
 @jwt_required() 

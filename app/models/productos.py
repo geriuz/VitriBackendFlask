@@ -29,13 +29,16 @@ class Productos(Base):
     id_usuarios: Mapped[int] = mapped_column(ForeignKey("usuarios.id_usuarios"))
     # ----------------------------------------------------------------------------------------------#
     # RELACIONES
-    # Reladcion uno a muchos entre categorias y productos
+    # Relacion uno a muchos entre categorias y productos
     categorias: Mapped["Categorias"] = relationship(back_populates="productos")  # type: ignore
-    # Reladcion uno a muchos entre usuarios y productos
+    # Relacion uno a muchos entre usuarios y productos
     usuarios: Mapped["Usuarios"] = relationship(back_populates="productos")  # type: ignore
-    # Reladcion uno a muchos entre pedidos_productos y productos
+    # Relacion uno a muchos entre pedidos_productos y productos
     pedidos_productos: Mapped[list["PedidosProductos"]] = relationship(back_populates="productos")  # type: ignore
+    # Relacion uno a muchos entre entradas y productos
     entradas: Mapped[list["Entradas"]] = relationship(back_populates="productos")   # type: ignore
+    # Relacion uno a muchos entre salidas y productos
+    salidas: Mapped[list["Salidas"]] = relationship(back_populates="productos")   # type: ignore
 
     # ----------------------------------------------------------------------------------------------#
 

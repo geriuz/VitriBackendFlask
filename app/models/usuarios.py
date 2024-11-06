@@ -32,6 +32,8 @@ class Usuarios(Base):
     pedidos: Mapped[list["Pedidos"]] = relationship(back_populates="usuarios", cascade="all, delete-orphan") # type: ignore
     # Reladcion uno a muchos entre entradas y usuarios
     entradas: Mapped[list["Entradas"]] = relationship(back_populates="usuarios",  cascade="all, delete-orphan") # type: ignore
+    # Reladcion uno a muchos entre salidas y usuarios
+    salidas: Mapped[list["Salidas"]] = relationship(back_populates="usuarios",  cascade="all, delete-orphan") # type: ignore
     #----------------------------------------------------------------------------------------------#
 
     def set_initial_values(self):
