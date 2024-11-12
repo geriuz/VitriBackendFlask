@@ -85,6 +85,24 @@ def actualizar_estado_pedido(id):
     pedido = Pedidos.query.filter_by(id_pedidos=id, id_usuarios=current_user_id).first_or_404()
     data = request.json
     pedido.estado_pedido = EstadoPedido(data['estado_pedido'])
+
+    if data['estado_pedido'] == "ENTREGADO" : 
+        deta_ped_filtrado = db.session.query(PedidosProductos).filter(PedidosProductos.id_pedidos == id).all()
+        # print (f"id_pedidos: {id}")
+        for deta in deta_ped_filtrado:
+            db.session.query(Productos).filter(Productos.id == deta.id).update({Productos.stock: Productos.stock - deta.cantidad})
+
+            # print (f"id_pedidos2: {id}")
+            # print (f"cantidad: {deta.cantidad_producto}")
+        # print (deta_ped_filtrado.id_pedidos)
+
+    if data['estado_pedido'] == "DEVUELTO" : 
+        deta_ped_filtrado = db.session.query(PedidosProductos).filter(PedidosProductos.id_pedidos == id).all()
+        # print (f"id_pedidos: {id}")
+        for deta in deta_ped_filtrado:
+            db.session.query(Productos).filter(Productos.id == deta.id).update({Productos.stock: Productos.stock + deta.cantidad})
+
+
     db.session.commit()
     return jsonify(message="Estado del pedido actualizado exitosamente")
 

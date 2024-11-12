@@ -1,0 +1,82 @@
+(.venv) PS C:\Wordspace\Vitrispace-flask\back\app> flask run --debug
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine SELECT DATABASE()
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine SELECT @@sql_mode
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine SELECT @@lower_case_table_names
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`categorias`
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`productos`
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`usuarios`
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`pedidos`
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`pedidos_productos`
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`entradas`
+2024-11-12 16:53:57,645 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,657 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`salidas`
+2024-11-12 16:53:57,657 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,657 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`banner`
+2024-11-12 16:53:57,657 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:57,657 INFO sqlalchemy.engine.Engine COMMIT
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+ * Restarting with stat
+2024-11-12 16:53:58,300 INFO sqlalchemy.engine.Engine SELECT DATABASE()
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine SELECT @@sql_mode
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine SELECT @@lower_case_table_names
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`categorias`
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`productos`
+2024-11-12 16:53:58,315 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,320 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`usuarios`
+2024-11-12 16:53:58,320 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,321 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`pedidos`
+2024-11-12 16:53:58,322 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,322 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`pedidos_productos`
+2024-11-12 16:53:58,323 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,323 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`entradas`
+2024-11-12 16:53:58,324 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,324 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`salidas`
+2024-11-12 16:53:58,324 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,324 INFO sqlalchemy.engine.Engine DESCRIBE `vitridb`.`banner`
+2024-11-12 16:53:58,324 INFO sqlalchemy.engine.Engine [raw sql] {}
+2024-11-12 16:53:58,324 INFO sqlalchemy.engine.Engine COMMIT
+ * Debugger is active!
+ * Debugger PIN: 122-221-656
+127.0.0.1 - - [12/Nov/2024 16:54:01] "OPTIONS /api/usuarios/pedidos/156 HTTP/1.1" 200 -
+2024-11-12 16:54:01,699 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2024-11-12 16:54:01,702 INFO sqlalchemy.engine.Engine SELECT pedidos.id_pedidos AS pedidos_id_pedidos, pedidos.monto_total AS pedidos_monto_total, pedidos.estado_pedido AS pedidos_estado_pedido, pedidos.fecha_creacion AS pedidos_fecha_creacion, pedidos.id_usuarios AS pedidos_id_usuarios
+FROM pedidos
+WHERE pedidos.id_pedidos = %(id_pedidos_1)s AND pedidos.id_usuarios = %(id_usuarios_1)s
+ LIMIT %(param_1)s
+2024-11-12 16:54:01,704 INFO sqlalchemy.engine.Engine [generated in 0.00189s] {'id_pedidos_1': 156, 'id_usuarios_1': 1, 'param_1': 1} 
+2024-11-12 16:54:01,706 INFO sqlalchemy.engine.Engine UPDATE pedidos SET estado_pedido=%(estado_pedido)s WHERE pedidos.id_pedidos = %(pedidos_id_pedidos)s
+2024-11-12 16:54:01,707 INFO sqlalchemy.engine.Engine [generated in 0.00073s] {'estado_pedido': 'ENTREGADO', 'pedidos_id_pedidos': 156}
+2024-11-12 16:54:01,710 INFO sqlalchemy.engine.Engine SELECT pedidos_productos.id_pedidos_productos AS pedidos_productos_id_pedidos_productos, pedidos_productos.cantidad AS pedidos_productos_cantidad, pedidos_productos.cantidad_producto AS pedidos_productos_cantidad_producto, pedidos_productos.precio AS pedidos_productos_precio, pedidos_productos.fecha_creacion AS pedidos_productos_fecha_creacion, pedidos_productos.fecha_actualizacion AS pedidos_productos_fecha_actualizacion, pedidos_productos.id_pedidos AS pedidos_productos_id_pedidos, pedidos_productos.id AS pedidos_productos_id
+FROM pedidos_productos
+WHERE pedidos_productos.id_pedidos = %(id_pedidos_1)s
+2024-11-12 16:54:01,711 INFO sqlalchemy.engine.Engine [generated in 0.00138s] {'id_pedidos_1': 156}
+id_pedidos: 156
+id_pedidos2: 156
+cantidad: 1.00
+id_pedidos2: 156
+cantidad: 30.00
+id_pedidos2: 156
+cantidad: 1.00
+id_pedidos2: 156
+cantidad: 1.00
+id_pedidos2: 156
+cantidad: 1.00
+2024-11-12 16:54:01,716 INFO sqlalchemy.engine.Engine COMMIT
+127.0.0.1 - - [12/Nov/2024 16:54:01] "PATCH /api/usuarios/pedidos/156 HTTP/1.1" 200 -
