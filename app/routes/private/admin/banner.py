@@ -26,6 +26,13 @@ def obtener_banner():
     banners = Banner.query.all()
     return jsonify([banner.to_dict() for banner in banners])
 
+@banner_admin.get("/api/admin/banner/<int:id>")
+@jwt_required() 
+@role_required([Roles.ADMIN])
+def obtener_banner_id(id):
+    banner = Banner.query.get_or_404(id, description='Producto no encontrado')
+    return jsonify(banner.to_dict())
+
 @banner_admin.patch('/api/admin/banner/<int:id>')
 @jwt_required() 
 @role_required([Roles.ADMIN])
