@@ -212,3 +212,51 @@ def obtener_pedido_por_id(pedido_id):
     }
 
     return jsonify(pedido_data), 200
+
+# TRAER TODOS LOS PEDIDOS
+@pedidos_user.get('/api/mod/pedidos')
+@jwt_required()  # Puedes mantener o quitar la autenticación según lo necesites
+@role_required([Roles.MOD])
+def obtener_todos_pedidos_mod():
+    # Obtener todos los pedidos de la base de datos
+    pedidos = Pedidos.query.all()
+    pedidos_data = []
+
+    for pedido in pedidos:
+        productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
+        productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
+
+        pedidos_data.append({
+            "id_pedido": pedido.id_pedidos,
+            "id_usuario": pedido.id_usuarios,
+            "monto_total": pedido.monto_total,
+            "estado_pedido": pedido.estado_pedido.value,
+            "fecha_creacion": pedido.fecha_creacion,
+            "productos": productos_data
+        })
+
+    return jsonify(pedidos_data), 200
+
+# TRAER LOS PEDIDOS POR ID
+@pedidos_user.get('/api/mod/pedidos/<int:pedido_id>')
+@jwt_required()  # Puedes mantener o quitar la autenticación según lo necesites
+@role_required([Roles.MOD])
+def obtener_pedido_por_id_mod(pedido_id):
+    # Obtener el pedido por ID sin filtrar por usuario
+    pedido = Pedidos.query.get_or_404(pedido_id, description="Pedido no encontrado")
+    
+    # Obtener los productos asociados al pedido
+    productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
+    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio} for p in productos]
+
+    # Estructurar la respuesta
+    pedido_data = {
+        "id_pedido": pedido.id_pedidos,
+        "id_usuario": pedido.id_usuarios,
+        "monto_total": pedido.monto_total,
+        "estado_pedido": pedido.estado_pedido.value,
+        "fecha_creacion": pedido.fecha_creacion,
+        "productos": productos_data
+    }
+
+    return jsonify(pedido_data), 200
