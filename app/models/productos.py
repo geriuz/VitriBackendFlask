@@ -20,6 +20,7 @@ class Productos(Base):
     is_promocion: Mapped[bool] = mapped_column(Boolean, nullable=False)
     stock: Mapped[int] = mapped_column(Integer, nullable=False)
     is_activo: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    anunciar: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     descuento: Mapped[float] = mapped_column(Numeric(10, 2))
     fecha_inicio_descuento: Mapped[Date] = mapped_column(Date, default=func.now())
     fecha_fin_descuento: Mapped[Date] = mapped_column(Date, default=func.now())
@@ -60,6 +61,7 @@ class Productos(Base):
             "is_promocion": self.is_promocion,
             "stock": self.stock,
             "is_activo": self.is_activo,
+            "anunciar": self.anunciar,
             "descuento": self.descuento,
             "id_categorias": self.id_categorias,
             "id_usuarios": self.id_usuarios,
@@ -70,4 +72,4 @@ class Productos(Base):
         }
 
     def __repr__(self):
-        return f"<SKU {self.sku!r}>, <Nombre {self.nombre!r}, <URLImagen {self.url_imagen!r}, <URLFichaTecnica {self.url_ficha_tecnica!r}, <UnidadProducto {self.unidad_producto!r}, <Cantidad {self.cantidad!r}, <MaxUsuario {self.max_usuario!r}, <Precio {self.precio!r},<IsPromocion {self.is_promocion!r},<IsStock {self.stock!r},<IsActivo {self.is_activo!r}, <Descuento {self.descuento!r}, <FechaInicioDescuento {self.fecha_inicio_descuento!r}, <FechaFinDescuento {self.fecha_fin_descuento!r}>"
+        return f"<SKU {self.sku!r}>, <Nombre {self.nombre!r}, <URLImagen {self.url_imagen!r}, <URLFichaTecnica {self.url_ficha_tecnica!r}, <UnidadProducto {self.unidad_producto!r}, <Cantidad {self.cantidad!r}, <MaxUsuario {self.max_usuario!r}, <Precio {self.precio!r},<IsPromocion {self.is_promocion!r},<IsStock {self.stock!r},<IsActivo {self.is_activo!r},<Anunciar {self.anunciar!r}, <Descuento {self.descuento!r}, <FechaInicioDescuento {self.fecha_inicio_descuento!r}, <FechaFinDescuento {self.fecha_fin_descuento!r}>"

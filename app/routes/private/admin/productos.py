@@ -25,6 +25,7 @@ def guardar_productos():
             max_usuario=data['max_usuario'],
             precio=data['precio'],
             is_promocion=data.get('is_promocion', False),
+            anunciar=data.get('anunciar', False),
             stock=data['stock'],
             descuento=data.get('descuento', 0),
             id_categorias=data['id_categorias'],
@@ -63,7 +64,7 @@ def actualizar_producto(id):
     data = request.json
     campos_permitidos = [
         'nombre', 'descripcion', 'url_imagen', 'url_ficha_tecnica', 'unidad_producto',
-        'cantidad', 'max_usuario', 'precio', 'is_promocion', 'stock', 'descuento', 'is_activo',
+        'cantidad', 'max_usuario', 'precio', 'is_promocion', 'stock', 'descuento', 'is_activo','anunciar',
         'id_categorias', 'fecha_inicio_descuento', 'fecha_fin_descuento'
     ]
     
