@@ -79,10 +79,12 @@ def obtener_pedidos_por_usuario():
     return jsonify(pedidos_data), 200
 
 @pedidos_user.patch('/api/usuarios/pedidos/<int:id>')
-@jwt_required()
+@jwt_required()  # Requiere autenticación JWT
+@role_required([Roles.ADMIN])  # Solo permite acceso a usuarios con el rol ADMIN
 def actualizar_estado_pedido(id):
-    current_user_id = get_jwt_identity()
-    pedido = Pedidos.query.filter_by(id_pedidos=id, id_usuarios=current_user_id).first_or_404()
+    # Buscar el pedido por su ID
+    pedido = Pedidos.query.filter_by(id_pedidos=id).first_or_404()
+
     data = request.json
     pedido.estado_pedido = EstadoPedido(data['estado_pedido'])
 
@@ -90,7 +92,11 @@ def actualizar_estado_pedido(id):
         deta_ped_filtrado = db.session.query(PedidosProductos).filter(PedidosProductos.id_pedidos == id).all()
         # print (f"id_pedidos: {id}")
         for deta in deta_ped_filtrado:
-            db.session.query(Productos).filter(Productos.id == deta.id).update({Productos.stock: Productos.stock - deta.cantidad})
+            producto = db.session.query(Productos).filter(Productos.id == deta.id).first()
+            if producto:
+                # Evitar stock negativo
+                nuevo_stock = max(0, producto.stock - deta.cantidad)
+                db.session.query(Productos).filter(Productos.id == deta.id).update({Productos.stock: nuevo_stock})
 
             # print (f"id_pedidos2: {id}")
             # print (f"cantidad: {deta.cantidad_producto}")
@@ -100,11 +106,25 @@ def actualizar_estado_pedido(id):
         deta_ped_filtrado = db.session.query(PedidosProductos).filter(PedidosProductos.id_pedidos == id).all()
         # print (f"id_pedidos: {id}")
         for deta in deta_ped_filtrado:
-            db.session.query(Productos).filter(Productos.id == deta.id).update({Productos.stock: Productos.stock + deta.cantidad})
+            producto = db.session.query(Productos).filter(Productos.id == deta.id).first()
+            if producto:
+                db.session.query(Productos).filter(Productos.id == deta.id).update({Productos.stock: producto.stock + deta.cantidad})
 
 
     db.session.commit()
     return jsonify(message="Estado del pedido actualizado exitosamente")
+
+@pedidos_user.patch('/api/usuarios/mipedido/<int:id>')
+@jwt_required()  # Requiere autenticación JWT
+def cancelar_pedido(id):
+    # Buscar el pedido por su ID
+    pedido = Pedidos.query.filter_by(id_pedidos=id).first_or_404()
+
+    data = request.json
+    pedido.estado_pedido = EstadoPedido(data['estado_pedido'])
+    db.session.commit()
+    return jsonify(message="Estado del pedido actualizado exitosamente")
+
 
 @pedidos_user.post('/api/usuarios/pedidos/<int:id_pedido>/productos')
 @jwt_required()

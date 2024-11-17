@@ -6,7 +6,7 @@ from flask_cors import CORS
 
 from models import * # Importación de los modelos
 from routes.public import categorias_public, productos_public, banner_public # Importación blueprints de rutas publicas
-from routes.private.admin import productos_admin, usuarios_admin, categorias_admin, entradas_admin, salidas_admin, banner_admin # Importación blueprints de rutas privadas rol admin
+from routes.private.admin import productos_admin, usuarios_admin, categorias_admin, entradas_admin, salidas_admin, banner_admin, admin_stats # Importación blueprints de rutas privadas rol admin
 from routes.private.user import pedidos_user, usuarios_user # Importación blueprints de rutas privadas rol usuario
 from routes.authentication.autenticacion import autenticacion  # Importación de los Blueprints de autenticación
 
@@ -56,6 +56,7 @@ app.register_blueprint(categorias_admin)
 app.register_blueprint(entradas_admin)
 app.register_blueprint(salidas_admin)
 app.register_blueprint(banner_admin)
+app.register_blueprint(admin_stats)
 # Registro de Blueprints rutas privadas rol usuario
 app.register_blueprint(pedidos_user)
 app.register_blueprint(usuarios_user)
