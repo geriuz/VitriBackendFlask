@@ -1,5 +1,4 @@
 from flask import Blueprint, jsonify
-from flask_jwt_extended import jwt_required
 from common.config.db import db
 from models.productos import Productos
 from models.pedidos_productos import PedidosProductos
@@ -49,46 +48,28 @@ def productos_mas_vendidos():
     return jsonify(data)
 
 
-@admin_stats.route('/ventas-por-fechas', methods=['GET'])
-def ventas_por_fechas():
-    # Obtener el parámetro de periodo (diario, semanal, mensual, anual)
-    periodo = request.args.get('periodo', 'mensual')  # Predeterminado: mensual
+@admin_stats.route('/ventas-ultimos-6-meses', methods=['GET'])
+def ventas_ultimos_6_meses():
+    from sqlalchemy import func
+    from datetime import datetime, timedelta
+
+    # Obtener la fecha actual y calcular los últimos 6 meses
     fecha_actual = datetime.now()
+    fecha_inicio = fecha_actual.replace(day=1) - timedelta(days=30 * 5)  # Hace 6 meses
+    formato_fecha = func.date_format(Pedidos.fecha_creacion, '%Y-%m')  # Agrupar por año-mes
 
-    # Filtro según el periodo
-    if periodo == 'diario':
-        fecha_inicio = fecha_actual.date()
-        formato_fecha = func.date(Pedidos.fecha_creacion)  # Agrupa por día
-    elif periodo == 'semanal':
-        fecha_inicio = fecha_actual - timedelta(days=7)
-        formato_fecha = func.date(Pedidos.fecha_creacion)  # Agrupa por día (ajustar para semanas si es necesario)
-    elif periodo == 'mensual':
-        fecha_inicio = fecha_actual.replace(day=1)
-        formato_fecha = func.concat(
-            func.year(Pedidos.fecha_creacion),
-            "-",
-            func.month(Pedidos.fecha_creacion)
-        )  # Agrupa por año-mes
-    elif periodo == 'anual':
-        fecha_inicio = fecha_actual.replace(month=1, day=1)
-        formato_fecha = func.year(Pedidos.fecha_creacion)  # Agrupa por año
-    else:
-        return jsonify({"error": "Periodo no válido"}), 400
-
-    # Consulta para calcular montos totales de ventas
+    # Consulta para calcular ventas de los últimos 6 meses
     ventas = db.session.query(
-        formato_fecha.label("fecha"),
-        func.sum(Pedidos.monto_total).label("total_ventas")
+        formato_fecha.label('mes'),
+        func.sum(Pedidos.monto_total).label('total_ventas')
     ).filter(Pedidos.fecha_creacion >= fecha_inicio) \
      .group_by(formato_fecha) \
      .order_by(formato_fecha) \
      .all()
-    # Formatear los datos
-    data = [{"fecha": fecha, "total_ventas": float(total_ventas)}
-            for fecha, total_ventas in ventas]
 
+    # Formatear los datos para la respuesta JSON
+    data = [{"mes": mes, "total_ventas": total_ventas} for mes, total_ventas in ventas]
     return jsonify(data)
-
 
 @admin_stats.route('/ventas-productos-por-fecha', methods=['GET'])
 def ventas_productos_por_fecha():
@@ -145,6 +126,9 @@ def productos_stock():
         return jsonify(data)
     except Exception as e:
         return jsonify({"message": f"Error al obtener los datos: {str(e)}"}), 500
+
+
+
 
 
 # 1. Ingresos Totales por Producto
