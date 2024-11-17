@@ -1,24 +1,151 @@
 from flask import Blueprint, jsonify
+from flask_jwt_extended import jwt_required
 from common.config.db import db
 from models.productos import Productos
 from models.pedidos_productos import PedidosProductos
+from models.pedidos import Pedidos
 from sqlalchemy import func
+from flask import request
+from datetime import datetime, timedelta
 
 admin_stats = Blueprint('admin_stats', __name__, url_prefix='/api/admin/stats')
 
+
+
 @admin_stats.route('/productos-mas-vendidos', methods=['GET'])
 def productos_mas_vendidos():
+    # Obtener el parámetro de periodo (diario, semanal, mensual, anual)
+    periodo = request.args.get('periodo', 'mensual')  # Predeterminado: mensual
+    fecha_actual = datetime.now()
+
+    # Filtro según el periodo
+    if periodo == 'diario':
+        fecha_inicio = fecha_actual.date()
+    elif periodo == 'semanal':
+        fecha_inicio = fecha_actual - timedelta(days=7)
+    elif periodo == 'mensual':
+        fecha_inicio = fecha_actual.replace(day=1)
+    elif periodo == 'anual':
+        fecha_inicio = fecha_actual.replace(month=1, day=1)
+    else:
+        return jsonify({"error": "Periodo no válido"}), 400
+
+    # Consulta con filtro de fecha y límite
     productos_vendidos = db.session.query(
-        Productos.nombre,  # Devuelve directamente el nombre como string
+        Productos.nombre,
         func.sum(PedidosProductos.cantidad).label('total_vendido')
     ).join(PedidosProductos, Productos.id == PedidosProductos.id) \
+     .join(Pedidos, Pedidos.id_pedidos == PedidosProductos.id_pedidos) \
+     .filter(Pedidos.fecha_creacion >= fecha_inicio) \
      .group_by(Productos.nombre) \
      .order_by(func.sum(PedidosProductos.cantidad).desc()) \
+     .limit(10) \
      .all()
 
-    # Ajustar cómo se accede a los datos devueltos
-    data = [{"producto": producto, "total_vendido": total_vendido} for producto, total_vendido in productos_vendidos]
+    # Formatear los datos
+    data = [{"producto": producto, "total_vendido": int(total_vendido or 0)}
+            for producto, total_vendido in productos_vendidos]
+
     return jsonify(data)
+
+
+@admin_stats.route('/ventas-por-fechas', methods=['GET'])
+def ventas_por_fechas():
+    # Obtener el parámetro de periodo (diario, semanal, mensual, anual)
+    periodo = request.args.get('periodo', 'mensual')  # Predeterminado: mensual
+    fecha_actual = datetime.now()
+
+    # Filtro según el periodo
+    if periodo == 'diario':
+        fecha_inicio = fecha_actual.date()
+        formato_fecha = func.date(Pedidos.fecha_creacion)  # Agrupa por día
+    elif periodo == 'semanal':
+        fecha_inicio = fecha_actual - timedelta(days=7)
+        formato_fecha = func.date(Pedidos.fecha_creacion)  # Agrupa por día (ajustar para semanas si es necesario)
+    elif periodo == 'mensual':
+        fecha_inicio = fecha_actual.replace(day=1)
+        formato_fecha = func.concat(
+            func.year(Pedidos.fecha_creacion),
+            "-",
+            func.month(Pedidos.fecha_creacion)
+        )  # Agrupa por año-mes
+    elif periodo == 'anual':
+        fecha_inicio = fecha_actual.replace(month=1, day=1)
+        formato_fecha = func.year(Pedidos.fecha_creacion)  # Agrupa por año
+    else:
+        return jsonify({"error": "Periodo no válido"}), 400
+
+    # Consulta para calcular montos totales de ventas
+    ventas = db.session.query(
+        formato_fecha.label("fecha"),
+        func.sum(Pedidos.monto_total).label("total_ventas")
+    ).filter(Pedidos.fecha_creacion >= fecha_inicio) \
+     .group_by(formato_fecha) \
+     .order_by(formato_fecha) \
+     .all()
+    # Formatear los datos
+    data = [{"fecha": fecha, "total_ventas": float(total_ventas)}
+            for fecha, total_ventas in ventas]
+
+    return jsonify(data)
+
+
+@admin_stats.route('/ventas-productos-por-fecha', methods=['GET'])
+def ventas_productos_por_fecha():
+    # Parámetros para el filtro
+    limite = int(request.args.get('limite', 10))  # Predeterminado: 10
+    fecha_inicio = request.args.get('fecha_inicio', None)
+    fecha_fin = request.args.get('fecha_fin', None)
+
+    # Validación de fechas
+    if fecha_inicio:
+        fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+    if fecha_fin:
+        fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
+
+    # Construir la consulta
+    query = db.session.query(
+        Productos.nombre.label("producto"),
+        func.date(Pedidos.fecha_creacion).label("fecha"),
+        func.sum(PedidosProductos.cantidad * PedidosProductos.precio).label("monto_vendido")
+    ).join(PedidosProductos, Productos.id == PedidosProductos.id) \
+     .join(Pedidos, Pedidos.id_pedidos == PedidosProductos.id_pedidos)
+
+    # Aplicar filtros de fecha si existen
+    if fecha_inicio:
+        query = query.filter(Pedidos.fecha_creacion >= fecha_inicio)
+    if fecha_fin:
+        query = query.filter(Pedidos.fecha_creacion <= fecha_fin)
+
+    # Agrupar, ordenar y limitar los resultados
+    ventas = query.group_by(Productos.nombre, func.date(Pedidos.fecha_creacion)) \
+                  .order_by(func.sum(PedidosProductos.cantidad * PedidosProductos.precio).desc()) \
+                  .limit(limite) \
+                  .all()
+
+    # Formatear los datos
+    data = [
+        {"producto": producto, "fecha": fecha.strftime("%Y-%m-%d"), "monto_vendido": float(monto_vendido)}
+        for producto, fecha, monto_vendido in ventas
+    ]
+
+    return jsonify(data)
+
+
+@admin_stats.route('/productos-stock', methods=['GET'])
+def productos_stock():
+    try:
+        productos = db.session.query(Productos.nombre, Productos.stock).all()
+
+        # Procesar los datos
+        data = [
+            {"producto": producto[0], "stock": producto[1]}
+            for producto in productos
+        ]
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"message": f"Error al obtener los datos: {str(e)}"}), 500
+
 
 # 1. Ingresos Totales por Producto
 # Ruta para calcular los ingresos generados por cada producto (cantidad vendida × precio).
@@ -28,7 +155,7 @@ def ingresos_por_producto():
     ingresos = db.session.query(
         Productos.nombre,
         func.sum(PedidosProductos.cantidad * Productos.precio).label('total_ingresos')
-    ).join(PedidosProductos, Productos.id == PedidosProductos.id_producto) \
+    ).join(PedidosProductos, Productos.id == PedidosProductos.id) \
      .group_by(Productos.nombre) \
      .order_by(func.sum(PedidosProductos.cantidad * Productos.precio).desc()) \
      .all()
@@ -90,7 +217,7 @@ def categorias_mas_vendidas():
         Categorias.nombre,
         func.sum(PedidosProductos.cantidad).label('total_vendido')
     ).join(Productos, Categorias.id == Productos.id_categorias) \
-     .join(PedidosProductos, Productos.id == PedidosProductos.id_producto) \
+     .join(PedidosProductos, Productos.id == PedidosProductos.id) \
      .group_by(Categorias.nombre) \
      .order_by(func.sum(PedidosProductos.cantidad).desc()) \
      .all()
@@ -140,4 +267,3 @@ def ventas_por_dia():
 
     data = [{"dia": str(dia), "total_ventas": float(total_ventas)} for dia, total_ventas in ventas_dia]
     return jsonify(data)
-
