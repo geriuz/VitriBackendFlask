@@ -17,8 +17,22 @@ def obtener_perfil_usuario():
     return jsonify(usuario.to_dict()), 200
 
 @usuarios_user.patch('/api/usuarios/perfil')
-@jwt_required() 
+@jwt_required()
 def actualizar_perfil_usuario():
+    current_user_id = get_jwt_identity()
+    usuario = Usuarios.query.get(current_user_id)
+    if not usuario:
+        return jsonify({'message': 'Usuario no encontrado'}), 404
+    
+    data = request.json
+    allowed_fields = ['nombres', 'apellidos', 'email', 'telefono', 'direccion', 'barrio', 'ciudad']  # Campos permitidos
+    
+    for field in allowed_fields:
+        if field in data:
+            setattr(usuario, field, data[field])  # Actualizar atributos permitidos
+    
+    db.session.commit()
+    return jsonify({'message': 'Perfil actualizado satisfactoriamente'}), 200
     current_user_id = get_jwt_identity()
     usuario = Usuarios.query.get(current_user_id)
     if not usuario:
