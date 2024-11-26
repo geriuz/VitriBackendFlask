@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Numeric, DateTime, ForeignKey, func
+from sqlalchemy import Integer, Numeric, DateTime, ForeignKey, String, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.ext.hybrid import hybrid_property
 from common.config.db import Base 
@@ -9,6 +9,10 @@ class PedidosProductos(Base):
     id_pedidos_productos: Mapped[int] = mapped_column(Integer, primary_key=True)
     cantidad: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     cantidad_producto: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+
+    nombre_producto: Mapped[str] = mapped_column(String(255), nullable=False)
+    unidad_producto: Mapped[str] = mapped_column(String(255), nullable=False)
+
     precio: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
     fecha_actualizacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
@@ -30,6 +34,8 @@ class PedidosProductos(Base):
         return {
             'cantidad': self.cantidad,
             'precio': self.precio,
+            'nombre_producto': self.nombre_producto,
+            'unidad_producto': self.unidad_producto,
             'fecha_creacion': self.fecha_creacion,
             'fecha_actualizacion': self.fecha_actualizacion,
             'id_pedidos': self.id_pedidos,
@@ -38,4 +44,4 @@ class PedidosProductos(Base):
         }
 
     def __repr__(self):
-        return f'<id {self.id!r}>, <cantidad {self.cantidad!r}, <precio {self.precio!r}>'
+        return f'<id {self.id!r}>, <cantidad {self.cantidad!r}, <precio {self.precio!r}>, <nombre_producto {self.nombre_producto!r}>, <unidad_producto {self.unidad_producto!r}>'

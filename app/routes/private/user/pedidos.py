@@ -26,6 +26,8 @@ def crear_pedido():
         nuevo_producto_pedido = PedidosProductos(
             cantidad=producto['cantidad'],
             cantidad_producto=producto['cantidad_producto'],
+            nombre_producto=producto['nombre_producto'],
+            unidad_producto=producto['unidad_producto'],
             precio=producto['precio'],
             id_pedidos=nuevo_pedido.id_pedidos,
             id=producto['id']
@@ -45,10 +47,19 @@ def obtener_pedido(pedido_id):
         return jsonify({"mensaje": "Pedido no encontrado"}), 404
     
     productos = PedidosProductos.query.filter_by(id_pedidos=pedido_id).all()
-    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio} for p in productos]
+    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio, "nombre_producto":p.nombre_producto, "unidad_producto":p.unidad_producto} for p in productos]
+
+
+    # Acceder al nombre y apellido del usuario relacionado
+    nombre_usuario = pedido.usuarios.nombres if pedido.usuarios else None
+    apellido_usuario = pedido.usuarios.apellidos if pedido.usuarios else None
+    identificacion_usuario = pedido.usuarios.identificacion if pedido.usuarios else None
 
     pedido_data = {
         "id_pedido": pedido.id_pedidos,
+        "nombre_usuario": nombre_usuario,  # Agregar el nombre del usuario
+        "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
+        "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
@@ -66,15 +77,23 @@ def obtener_pedidos_por_usuario():
     
     for pedido in pedidos:
         productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
-        productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
+        productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio, "nombre_producto":p.nombre_producto, "unidad_producto":p.unidad_producto} for p in productos]
 
+        # Acceder al nombre y apellido del usuario relacionado
+        nombre_usuario = pedido.usuarios.nombres if pedido.usuarios else None
+        apellido_usuario = pedido.usuarios.apellidos if pedido.usuarios else None
+        identificacion_usuario = pedido.usuarios.identificacion if pedido.usuarios else None
+        
         pedidos_data.append({
             "id_pedido": pedido.id_pedidos,
+            "nombre_usuario": nombre_usuario,  # Agregar el nombre del usuario
+            "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
+            "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
-        })
+            })
 
     return jsonify(pedidos_data), 200
 
@@ -196,11 +215,19 @@ def obtener_todos_pedidos():
 
     for pedido in pedidos:
         productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
-        productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
+        productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio, "cantidad_producto": p.cantidad_producto, "nombre_producto":p.nombre_producto, "unidad_producto":p.unidad_producto} for p in productos]
+
+        # Acceder al nombre y apellido del usuario relacionado
+        nombre_usuario = pedido.usuarios.nombres if pedido.usuarios else None
+        apellido_usuario = pedido.usuarios.apellidos if pedido.usuarios else None
+        identificacion_usuario = pedido.usuarios.identificacion if pedido.usuarios else None
 
         pedidos_data.append({
             "id_pedido": pedido.id_pedidos,
             "id_usuario": pedido.id_usuarios,
+            "nombre_usuario": nombre_usuario,  # Agregar el nombre del usuario
+            "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
+            "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
@@ -219,12 +246,21 @@ def obtener_pedido_por_id(pedido_id):
     
     # Obtener los productos asociados al pedido
     productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
-    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio} for p in productos]
+    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio, "nombre_producto":p.nombre_producto, "unidad_producto":p.unidad_producto} for p in productos]
+
+
+    # Acceder al nombre y apellido del usuario relacionado
+    nombre_usuario = pedido.usuarios.nombres if pedido.usuarios else None
+    apellido_usuario = pedido.usuarios.apellidos if pedido.usuarios else None
+    identificacion_usuario = pedido.usuarios.identificacion if pedido.usuarios else None
 
     # Estructurar la respuesta
     pedido_data = {
         "id_pedido": pedido.id_pedidos,
         "id_usuario": pedido.id_usuarios,
+        "nombre_usuario": nombre_usuario,  # Agregar el nombre del usuario
+        "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
+        "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
@@ -244,11 +280,19 @@ def obtener_todos_pedidos_mod():
 
     for pedido in pedidos:
         productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
-        productos_data = [{"id": p.id, "cantidad": p.cantidad, "precio": p.precio} for p in productos]
+        productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio, "nombre_producto":p.nombre_producto, "unidad_producto":p.unidad_producto} for p in productos]
+
+        # Acceder al nombre y apellido del usuario relacionado
+        nombre_usuario = pedido.usuarios.nombres if pedido.usuarios else None
+        apellido_usuario = pedido.usuarios.apellidos if pedido.usuarios else None
+        identificacion_usuario = pedido.usuarios.identificacion if pedido.usuarios else None
 
         pedidos_data.append({
             "id_pedido": pedido.id_pedidos,
             "id_usuario": pedido.id_usuarios,
+            "nombre_usuario": nombre_usuario,  # Agregar el nombre del usuario
+            "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
+            "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
@@ -267,12 +311,19 @@ def obtener_pedido_por_id_mod(pedido_id):
     
     # Obtener los productos asociados al pedido
     productos = PedidosProductos.query.filter_by(id_pedidos=pedido.id_pedidos).all()
-    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio} for p in productos]
+    productos_data = [{"id": p.id, "cantidad": p.cantidad, "cantidad_producto": p.cantidad_producto, "precio": p.precio, "nombre_producto":p.nombre_producto, "unidad_producto":p.unidad_producto} for p in productos]
 
+    # Acceder al nombre y apellido del usuario relacionado
+    nombre_usuario = pedido.usuarios.nombres if pedido.usuarios else None
+    apellido_usuario = pedido.usuarios.apellidos if pedido.usuarios else None
+    identificacion_usuario = pedido.usuarios.identificacion if pedido.usuarios else None
     # Estructurar la respuesta
     pedido_data = {
         "id_pedido": pedido.id_pedidos,
         "id_usuario": pedido.id_usuarios,
+        "nombre_usuario": nombre_usuario,  # Agregar el nombre del usuario
+        "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
+        "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
