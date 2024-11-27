@@ -22,7 +22,7 @@ class Salidas(Base):
     productos: Mapped["Productos"] = relationship(back_populates="salidas") #type: ignore
     #----------------------------------------------------------------------------------------------#
 
-    def __todict__(self):
+    def to_dict(self):
         return {
             'id_salidas': self.id_salidas,
             'fecha_creacion': self.fecha_creacion,

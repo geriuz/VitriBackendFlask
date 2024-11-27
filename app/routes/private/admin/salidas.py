@@ -52,29 +52,3 @@ def salidas_por_id(id):
     salida = Salidas.query.get_or_404(id, description='Producto no encontrado')
     return jsonify(salida.to_dict())
 
-@salidas_admin.patch('/api/admin/salidas/<int:id>')
-@jwt_required() 
-@role_required([Roles.ADMIN])
-def actualizar_salida(id):
-    salida = Salidas.query.get(id)
-    if not salida:
-        return jsonify({'message': 'Salida no encontrada'}), 404
-    data = request.json
-    salida.salidas_productos = data['salidas_productos']
-    salida.salidas_estado = data['salidas_estado']
-    salida.salidas_cantidad = data['salidas_cantidad']
-    salida.observacion = data['observacion']
-    salida.salidas_usuario = data['salidas_usuario']
-    db.session.commit()
-    return jsonify({'message': 'Salida actualizada satisfactoriamente'}), 200
-
-@salidas_admin.delete('/api/admin/salidas/<int:id>')
-@jwt_required() 
-@role_required([Roles.ADMIN])
-def eliminar_salida(id):
-    salida = Salidas.query.get(id)
-    if not salida:
-        return jsonify({'message': 'Salida no encontrada'}), 404
-    db.session.delete(salida)
-    db.session.commit()
-    return jsonify({'message': 'La salida ha sido eliminada satisactoriamnete'}), 200
