@@ -3,6 +3,7 @@ from common.config.db import db
 from models.productos import Productos
 from models.pedidos_productos import PedidosProductos
 from models.pedidos import Pedidos
+from models.usuarios import Usuarios
 from sqlalchemy import func
 from flask import request
 from datetime import datetime, timedelta
@@ -127,6 +128,21 @@ def productos_stock():
     except Exception as e:
         return jsonify({"message": f"Error al obtener los datos: {str(e)}"}), 500
 
+# 3. Clientes Más Frecuentes
+# Ruta para identificar los clientes que han realizado más pedidos.
+
+@admin_stats.route('/clientes-mas-frecuentes', methods=['GET'])
+def clientes_mas_frecuentes():
+    clientes_frecuentes = db.session.query(
+        Usuarios.nombres,
+        func.count(Pedidos.id_pedidos).label('total_pedidos')
+    ).join(Pedidos, Usuarios.id_usuarios == Pedidos.id_usuarios) \
+     .group_by(Usuarios.nombres) \
+     .order_by(func.count(Pedidos.id_pedidos).desc()) \
+     .limit(10).all()
+
+    data = [{"cliente": cliente, "total_pedidos": total_pedidos} for cliente, total_pedidos in clientes_frecuentes]
+    return jsonify(data)
 
 
 
@@ -162,21 +178,6 @@ def pedidos_por_mes():
     data = [{"mes": mes, "total_pedidos": total_pedidos} for mes, total_pedidos in pedidos_mes]
     return jsonify(data)
 
-# 3. Clientes Más Frecuentes
-# Ruta para identificar los clientes que han realizado más pedidos.
-
-@admin_stats.route('/clientes-mas-frecuentes', methods=['GET'])
-def clientes_mas_frecuentes():
-    clientes_frecuentes = db.session.query(
-        Usuarios.nombre,
-        func.count(Pedidos.id_pedidos).label('total_pedidos')
-    ).join(Pedidos, Usuarios.id_usuarios == Pedidos.id_usuarios) \
-     .group_by(Usuarios.nombre) \
-     .order_by(func.count(Pedidos.id_pedidos).desc()) \
-     .limit(10).all()
-
-    data = [{"cliente": cliente, "total_pedidos": total_pedidos} for cliente, total_pedidos in clientes_frecuentes]
-    return jsonify(data)
 
 # 4. Productos con Menor Stock
 # Ruta para listar los productos que tienen un stock bajo (menor a un umbral, por ejemplo, 10 unidades).
