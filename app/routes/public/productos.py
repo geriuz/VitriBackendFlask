@@ -45,74 +45,28 @@ def obtener_productos():
     
     return jsonify(disponibles)
 
-@productos_public.get("/api/publico/productos1")
-def obtener_productos1():
-    productos = Productos.query.all()
-    lista_productos = [
-        {
-            "id": producto.id,
-            "sku": producto.sku,
-            "nombre": producto.nombre,
-            "descripcion": producto.descripcion,
-            "url_imagen": producto.url_imagen,
-            "url_ficha_tecnica": producto.url_ficha_tecnica,
-            "unidad_producto": producto.unidad_producto.value,
-            "cantidad": producto.cantidad,
-            "max_usuario": producto.max_usuario,
-            "precio": producto.precio,
-            "is_promocion": producto.is_promocion,
-            "stock": producto.stock,
-            "descuento": producto.descuento,
-            "is_activo": producto.is_activo,
-            "anunciar": producto.anunciar,
-            "id_categorias": producto.id_categorias,
-            "id_usuarios": producto.id_usuarios,
-            "fecha_inicio_descuento": producto.fecha_inicio_descuento,
-            "fecha_fin_descuento": producto.fecha_fin_descuento,
-        }
-        for producto in productos
-    ]
-    return jsonify(lista_productos)
-
-
 @productos_public.get("/api/publico/productos/<int:id>")
 def obtener_producto_por_id(id):
+    # Obtener la cantidad pendiente de ese producto
+    cantidad_pendiente = db.session.query(
+        db.func.sum(PedidosProductos.cantidad)
+    ).join(Pedidos, PedidosProductos.id_pedidos == Pedidos.id_pedidos).filter(
+        Pedidos.estado_pedido == "PENDIENTE",
+        PedidosProductos.id == id
+    ).scalar()  # Usamos scalar para obtener un valor único
+
+    # Si no hay pedidos pendientes, la cantidad pendiente es 0
+    cantidad_pendiente = cantidad_pendiente or 0
+
+    # Obtener el producto por ID
     producto = Productos.query.get_or_404(id, description='Producto no encontrado')
     if not producto:
-        return jsonify({"message": "Producto no encontrada"}), 404
-    return jsonify(
-        {
-            "id": producto.id,
-            "nombre": producto.nombre,
-            "descripcion": producto.descripcion,
-            "url_imagen": producto.url_imagen,
-            "url_ficha_tecnica": producto.url_ficha_tecnica,
-            "unidad_producto": producto.unidad_producto.value,
-            "cantidad": producto.cantidad,
-            "max_usuario": producto.max_usuario,
-            "precio": producto.precio,
-            "is_promocion": producto.is_promocion,
-            "stock": producto.stock,
-            "descuento": producto.descuento,
-            "is_activo": producto.is_activo,
-            "anunciar": producto.anunciar,
-            "id_categorias": producto.id_categorias,
-            "id_usuarios": producto.id_usuarios,
-            "fecha_inicio_descuento": producto.fecha_inicio_descuento,
-            "fecha_fin_descuento": producto.fecha_fin_descuento,
-        }
-    )
+        return jsonify({"message": "Producto no encontrado"}), 404
 
+    # Calcular el stock disponible
+    stock_disponible = producto.stock - cantidad_pendiente
 
-@productos_public.get("/api/publico/productos/<int:id>")
-def obtener_producto_pedidos_por_id(id):
-    producto = Productos.query.get_or_404(id, description='Producto no encontrado')
-    ped_producto = db.session.query(db.func.sum(PedidosProductos.cantidad).join(Pedidos, PedidosProductos.id_pedidos== Pedidos.id_pedidos)).filter(Pedidos.estado_pedido == "PENDIENTE" and PedidosProductos.id == id).group_by(PedidosProductos.id).all()
-
-    print ("hola", ped_producto)
-    
-    if not producto:
-        return jsonify({"message": "Producto no encontrada"}), 404
+    # Devolver la información del producto
     return jsonify(
         {
             "id": producto.id,
@@ -126,7 +80,8 @@ def obtener_producto_pedidos_por_id(id):
             "precio": producto.precio,
             "is_promocion": producto.is_promocion,
             "stock_original": producto.stock,
-            "stock": producto.stock - ped_producto.cantidad,
+            "cantidad_pendiente": cantidad_pendiente,
+            "stock": stock_disponible,
             "descuento": producto.descuento,
             "is_activo": producto.is_activo,
             "anunciar": producto.anunciar,
@@ -136,3 +91,4 @@ def obtener_producto_pedidos_por_id(id):
             "fecha_fin_descuento": producto.fecha_fin_descuento,
         }
     )
+
