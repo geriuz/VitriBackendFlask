@@ -17,6 +17,7 @@ def crear_pedido():
     nuevo_pedido = Pedidos(
         monto_total=data['monto_total'],
         direccion=data['direccion'],
+        forma_entrega=data['forma_entrega'],
         estado_pedido=EstadoPedido.PENDIENTE,
         id_usuarios=current_user_id,
     )
@@ -63,6 +64,7 @@ def obtener_pedido(pedido_id):
         "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
         "direccion": pedido.direccion,
+        "forma_entrega": pedido.forma_entrega,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data
@@ -93,6 +95,7 @@ def obtener_pedidos_por_usuario():
             "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
             "direccion": pedido.direccion,
+            "forma_entrega": pedido.forma_entrega,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -233,6 +236,7 @@ def obtener_todos_pedidos():
             "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
             "direccion": pedido.direccion,
+            "forma_entrega": pedido.forma_entrega,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -267,6 +271,7 @@ def obtener_pedido_por_id(pedido_id):
         "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
         "direccion": pedido.direccion,
+        "forma_entrega": pedido.forma_entrega,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data
@@ -300,6 +305,7 @@ def obtener_todos_pedidos_mod():
             "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
             "direccion": pedido.direccion,
+            "forma_entrega": pedido.forma_entrega,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -332,6 +338,7 @@ def obtener_pedido_por_id_mod(pedido_id):
         "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
         "direccion": pedido.direccion,
+        "forma_entrega": pedido.forma_entrega,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data
