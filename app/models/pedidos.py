@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, Numeric, Enum,  DateTime, ForeignKey, func
+from sqlalchemy import Integer, Numeric, Enum,  DateTime, ForeignKey, String, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from common.config.db import Base 
 from common.utils.enums.estado_pedido import EstadoPedido
@@ -9,7 +9,7 @@ class Pedidos(Base):
     id_pedidos: Mapped[int] = mapped_column(Integer, primary_key=True)
     monto_total: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
     estado_pedido: Mapped[EstadoPedido] = mapped_column(Enum(EstadoPedido), nullable=False)
-
+    direccion: Mapped[str] = mapped_column(String(255), nullable=False)
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
 
     id_usuarios: Mapped[int] = mapped_column(ForeignKey("usuarios.id_usuarios"))
@@ -37,8 +37,9 @@ class Pedidos(Base):
             "monto_total": float(self.monto_total),  # Convierte Numeric a float si es necesario
             "estado_pedido": self.estado_pedido.name,
             "fecha_creacion": self.fecha_creacion,
+            "direccion": self.direccion,
             "id_usuarios": self.id_usuarios,
         }
 
     def __repr__(self):
-        return f'<id {self.id!r}>, <email {self.email!r}, <monto_total {self.monto_total!r}, <estado_pedido {self.estado_pedido!r}>'
+        return f'<id {self.id!r}>, <email {self.email!r}, <monto_total {self.monto_total!r}, <estado_pedido {self.estado_pedido!r}, <direccion {self.direccion!r}>'

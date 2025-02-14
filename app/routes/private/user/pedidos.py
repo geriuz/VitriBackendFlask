@@ -16,6 +16,7 @@ def crear_pedido():
     
     nuevo_pedido = Pedidos(
         monto_total=data['monto_total'],
+        direccion=data['direccion'],
         estado_pedido=EstadoPedido.PENDIENTE,
         id_usuarios=current_user_id,
     )
@@ -61,6 +62,7 @@ def obtener_pedido(pedido_id):
         "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
         "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
+        "direccion": pedido.direccion,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data
@@ -90,6 +92,7 @@ def obtener_pedidos_por_usuario():
             "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
             "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
+            "direccion": pedido.direccion,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -229,6 +232,7 @@ def obtener_todos_pedidos():
             "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
             "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
+            "direccion": pedido.direccion,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -262,6 +266,7 @@ def obtener_pedido_por_id(pedido_id):
         "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
         "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
+        "direccion": pedido.direccion,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data
@@ -294,6 +299,7 @@ def obtener_todos_pedidos_mod():
             "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
             "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
             "monto_total": pedido.monto_total,
+            "direccion": pedido.direccion,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -325,6 +331,7 @@ def obtener_pedido_por_id_mod(pedido_id):
         "apellido_usuario": apellido_usuario,  # Agregar el apellido del usuario
         "identificacion_usuario": identificacion_usuario,  # Agregar la identificacion del usuario
         "monto_total": pedido.monto_total,
+        "direccion": pedido.direccion,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data

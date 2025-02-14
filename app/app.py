@@ -27,7 +27,7 @@ app.config["SQLALCHEMY_ECHO"] = True  # Habilitar el echo para ver las sentencia
 # JSon Web Token (JWT) configuracion
 # -------------------------------------------------------------------------------------------------------- #
 app.config['JWT_SECRET_KEY'] = 'iDJa44PZXLrQ6X396ZKYE8WGXG4Gt2LFE3fyV0TinuTtBnzabGhp6167VFwJPuz2qbv3M8ueG78PTTryHKyacfUc28T9Pm92aztY'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=2)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=6)
 
 jwt = JWTManager(app)
 
