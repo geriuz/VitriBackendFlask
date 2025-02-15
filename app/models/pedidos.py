@@ -11,6 +11,9 @@ class Pedidos(Base):
     estado_pedido: Mapped[EstadoPedido] = mapped_column(Enum(EstadoPedido), nullable=False)
     direccion: Mapped[str] = mapped_column(String(255), nullable=False)
     forma_entrega: Mapped[str] = mapped_column(String(255), nullable=False)
+    barrio: Mapped[str] = mapped_column(String(255), nullable=False)
+    ciudad: Mapped[str] = mapped_column(String(255), nullable=False)
+
     fecha_creacion: Mapped[DateTime] = mapped_column(DateTime, default=func.now())
 
     id_usuarios: Mapped[int] = mapped_column(ForeignKey("usuarios.id_usuarios"))
@@ -39,9 +42,11 @@ class Pedidos(Base):
             "estado_pedido": self.estado_pedido.name,
             "fecha_creacion": self.fecha_creacion,
             "direccion": self.direccion,
+            "barrio": self.barrio,
+            "ciudad": self.ciudad,
             "forma_entrega": self.forma_entrega,
             "id_usuarios": self.id_usuarios,
         }
 
     def __repr__(self):
-        return f'<id {self.id!r}>, <email {self.email!r}, <monto_total {self.monto_total!r}, <estado_pedido {self.estado_pedido!r}, <direccion {self.direccion!r}>, <forma_entrega {self.forma_entrega!r}>'
+        return f'<id {self.id!r}>, <email {self.email!r}, <monto_total {self.monto_total!r}, <estado_pedido {self.estado_pedido!r}, <direccion {self.direccion!r}>, <forma_entrega {self.forma_entrega!r}>, <barrio {self.barrio!r}>, <ciudad {self.ciudad!r}>'

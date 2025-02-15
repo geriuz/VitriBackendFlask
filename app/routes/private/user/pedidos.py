@@ -18,6 +18,8 @@ def crear_pedido():
         monto_total=data['monto_total'],
         direccion=data['direccion'],
         forma_entrega=data['forma_entrega'],
+        barrio=data['barrio'],
+        ciudad=data['ciudad'],
         estado_pedido=EstadoPedido.PENDIENTE,
         id_usuarios=current_user_id,
     )
@@ -65,6 +67,8 @@ def obtener_pedido(pedido_id):
         "monto_total": pedido.monto_total,
         "direccion": pedido.direccion,
         "forma_entrega": pedido.forma_entrega,
+        "barrio": pedido.barrio,
+        "ciudad": pedido.ciudad,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data
@@ -96,6 +100,8 @@ def obtener_pedidos_por_usuario():
             "monto_total": pedido.monto_total,
             "direccion": pedido.direccion,
             "forma_entrega": pedido.forma_entrega,
+            "barrio": pedido.barrio,
+            "ciudad": pedido.ciudad,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -237,6 +243,8 @@ def obtener_todos_pedidos():
             "monto_total": pedido.monto_total,
             "direccion": pedido.direccion,
             "forma_entrega": pedido.forma_entrega,
+            "barrio": pedido.barrio,
+            "ciudad": pedido.ciudad,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -272,6 +280,8 @@ def obtener_pedido_por_id(pedido_id):
         "monto_total": pedido.monto_total,
         "direccion": pedido.direccion,
         "forma_entrega": pedido.forma_entrega,
+        "barrio": pedido.barrio,
+        "ciudad": pedido.ciudad,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data
@@ -306,6 +316,8 @@ def obtener_todos_pedidos_mod():
             "monto_total": pedido.monto_total,
             "direccion": pedido.direccion,
             "forma_entrega": pedido.forma_entrega,
+            "barrio": pedido.barrio,
+            "ciudad": pedido.ciudad,
             "estado_pedido": pedido.estado_pedido.value,
             "fecha_creacion": pedido.fecha_creacion,
             "productos": productos_data
@@ -339,6 +351,8 @@ def obtener_pedido_por_id_mod(pedido_id):
         "monto_total": pedido.monto_total,
         "direccion": pedido.direccion,
         "forma_entrega": pedido.forma_entrega,
+        "barrio": pedido.barrio,
+        "ciudad": pedido.ciudad,
         "estado_pedido": pedido.estado_pedido.value,
         "fecha_creacion": pedido.fecha_creacion,
         "productos": productos_data
