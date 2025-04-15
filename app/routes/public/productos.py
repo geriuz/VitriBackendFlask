@@ -5,7 +5,6 @@ from app.models import Pedidos, PedidosProductos, Productos, Usuarios
 
 productos_public = Blueprint("productos_public", __name__)
 
-
 @productos_public.get("/api/publico/productos")
 def obtener_productos():
     pedidos_pendientes = db.session.query(PedidosProductos.id, db.func.sum(PedidosProductos.cantidad)).join(Pedidos, PedidosProductos.id_pedidos == Pedidos.id_pedidos).filter(Pedidos.estado_pedido == "PENDIENTE").group_by(PedidosProductos.id).all()
