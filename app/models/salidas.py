@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, Numeric, DateTime, Enum, ForeignKey, String, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from common.config.db import Base 
-from common.utils.enums.estado_salida import EstadoSalida
+from app.common.config.db import Base 
+from app.common.utils.enums.estado_salida import EstadoSalida
 
 class Salidas(Base):
     __tablename__ = 'salidas'

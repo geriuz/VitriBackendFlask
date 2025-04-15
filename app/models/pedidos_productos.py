@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, Numeric, DateTime, ForeignKey, String, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.ext.hybrid import hybrid_property
-from common.config.db import Base 
+from app.common.config.db import Base 
 
 class PedidosProductos(Base):
     __tablename__ = 'pedidos_productos'

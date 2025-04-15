@@ -1,7 +1,7 @@
 from sqlalchemy import (Integer, Numeric, String, Boolean, Enum, Float, DateTime, ForeignKey, Date, func)
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from common.config.db import Base
-from common.utils.enums.unidad_producto import UnidadProducto
+from app.common.config.db import Base
+from app.common.utils.enums.unidad_producto import UnidadProducto
 
 
 class Productos(Base):

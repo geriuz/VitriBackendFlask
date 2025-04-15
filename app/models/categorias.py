@@ -1,6 +1,6 @@
 from sqlalchemy import Integer, String, Boolean, DateTime, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from common.config.db import Base 
+from app.common.config.db import Base 
 
 class Categorias(Base):
     __tablename__ = 'categorias'

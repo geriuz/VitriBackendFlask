@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required
-from common.utils.auth import role_required
-from common.utils.enums.roles import Roles
-from common.config.db import db
+from app.common.utils.auth import role_required
+from app.common.utils.enums.roles import Roles
+from app.common.config.db import db
 from models.salidas import Salidas
 from models.productos import Productos
 

@@ -1,6 +1,6 @@
 from sqlalchemy import Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column
-from common.config.db import Base 
+from app.common.config.db import Base 
 
 class Banner(Base):
     __tablename__ = 'banner'

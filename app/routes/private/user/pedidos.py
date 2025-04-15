@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from common.utils.auth import role_required
-from common.utils.enums.roles import Roles
-from common.utils.enums.estado_pedido import EstadoPedido
-from common.config.db import db
+from app.common.utils.auth import role_required
+from app.common.utils.enums.roles import Roles
+from app.common.utils.enums.estado_pedido import EstadoPedido
+from app.common.config.db import db
 from models import Pedidos, PedidosProductos, Productos, Usuarios
 
 pedidos_user = Blueprint('pedidos_user', __name__)

@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from common.config.db import db
+from app.common.config.db import db
 from models.productos import Productos
 from models import Pedidos, PedidosProductos, Productos, Usuarios
 

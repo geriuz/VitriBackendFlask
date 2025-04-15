@@ -1,6 +1,6 @@
 from sqlalchemy import Integer, Numeric, DateTime, ForeignKey, String, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from common.config.db import Base 
+from app.common.config.db import Base 
 
 class Entradas(Base):
     __tablename__ = 'entradas'

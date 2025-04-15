@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from common.config.db import db
+from app.common.config.db import db
 from models.categorias import Categorias
 
 categorias_public = Blueprint('categorias_public', __name__)

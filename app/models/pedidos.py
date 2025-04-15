@@ -1,7 +1,7 @@
 from sqlalchemy import Integer, Numeric, Enum,  DateTime, ForeignKey, String, func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from common.config.db import Base 
-from common.utils.enums.estado_pedido import EstadoPedido
+from app.common.config.db import Base 
+from app.common.utils.enums.estado_pedido import EstadoPedido
 
 class Pedidos(Base):
     __tablename__ = 'pedidos'

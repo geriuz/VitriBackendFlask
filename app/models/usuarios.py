@@ -1,9 +1,9 @@
 from sqlalchemy import Integer, String, Boolean, Enum, DateTime, func
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship, Mapped, mapped_column
-from common.utils.enums.roles import Roles
-from common.config.db import Base 
-from common.utils.enums.tipo_identificacion import TipoIdentificacion
+from app.common.utils.enums.roles import Roles
+from app.common.config.db import Base 
+from app.common.utils.enums.tipo_identificacion import TipoIdentificacion
 
 class Usuarios(Base):
     __tablename__ = 'usuarios'
