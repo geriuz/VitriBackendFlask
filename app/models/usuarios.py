@@ -13,7 +13,7 @@ class Usuarios(Base):
     apellidos: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str] = mapped_column(String(255), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(255), nullable=False)
-    rol: Mapped[Roles] = mapped_column(Enum(Roles), nullable=False, default=Roles.ADMIN)
+    rol: Mapped[Roles] = mapped_column(Enum(Roles), nullable=False, default=Roles.CLIENTE)
     tipo_identificacion: Mapped[TipoIdentificacion] = mapped_column(Enum(TipoIdentificacion), nullable=False)
     identificacion: Mapped[str] = mapped_column(String(255), nullable=False)
     telefono: Mapped[str] = mapped_column(String(255), nullable=False)
