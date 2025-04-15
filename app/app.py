@@ -1,17 +1,17 @@
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
-from common.config.db import db
+from app.common.config.db import db
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 load_dotenv()  # Cargar variables de entorno desde el archivo .env
 
-from models import * # Importación de los modelos
-from routes.public import categorias_public, productos_public, banner_public # Importación blueprints de rutas publicas
-from routes.private.admin import productos_admin, usuarios_admin, categorias_admin, entradas_admin, salidas_admin, banner_admin, admin_stats # Importación blueprints de rutas privadas rol admin
-from routes.private.user import pedidos_user, usuarios_user # Importación blueprints de rutas privadas rol usuario
-from routes.authentication.autenticacion import autenticacion  # Importación de los Blueprints de autenticación
+from app.models import * # Importación de los modelos
+from app.routes.public import categorias_public, productos_public, banner_public # Importación blueprints de rutas publicas
+from app.routes.private.admin import productos_admin, usuarios_admin, categorias_admin, entradas_admin, salidas_admin, banner_admin, admin_stats # Importación blueprints de rutas privadas rol admin
+from app.routes.private.user import pedidos_user, usuarios_user # Importación blueprints de rutas privadas rol usuario
+from app.routes.authentication.autenticacion import autenticacion  # Importación de los Blueprints de autenticación
 
 # -------------------------------------------------------------------------------------------------------- #
 # Creación de la aplicación Flask
