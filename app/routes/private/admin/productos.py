@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.common.utils.auth import role_required
 from app.common.utils.enums.roles import Roles
 from app.common.config.db import db
-from models.productos import Productos
+from app.models.productos import Productos
 from sqlalchemy.exc import IntegrityError
 
 productos_admin = Blueprint('productos_admin', __name__)

@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from app.common.utils.auth import role_required
 from app.common.utils.enums.roles import Roles
 from app.common.config.db import db
-from models.banner import Banner
+from app.models.banner import Banner
 
 banner_public = Blueprint('banner_public', __name__)
 

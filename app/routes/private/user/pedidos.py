@@ -4,7 +4,7 @@ from app.common.utils.auth import role_required
 from app.common.utils.enums.roles import Roles
 from app.common.utils.enums.estado_pedido import EstadoPedido
 from app.common.config.db import db
-from models import Pedidos, PedidosProductos, Productos, Usuarios
+from app.models import Pedidos, PedidosProductos, Productos, Usuarios
 
 pedidos_user = Blueprint('pedidos_user', __name__)
 

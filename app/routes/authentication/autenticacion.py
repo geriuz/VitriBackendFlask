@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, set_access_cookies, unset_jwt_cookies
 from sqlalchemy.exc import IntegrityError
 from app.common.config.db import db
-from models.usuarios import Usuarios
+from app.models.usuarios import Usuarios
 from app.common.utils.auth import role_required 
 
 autenticacion = Blueprint('autenticacion', __name__)

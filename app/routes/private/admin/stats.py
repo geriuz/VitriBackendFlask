@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify
 from app.common.config.db import db
-from models.productos import Productos
-from models.pedidos_productos import PedidosProductos
-from models.pedidos import Pedidos
-from models.usuarios import Usuarios
+from app.models.productos import Productos
+from app.models.pedidos_productos import PedidosProductos
+from app.models.pedidos import Pedidos
+from app.models.usuarios import Usuarios
 from sqlalchemy import func
 from flask import request
 from datetime import datetime, timedelta

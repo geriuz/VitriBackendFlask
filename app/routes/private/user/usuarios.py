@@ -3,7 +3,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.common.utils.auth import role_required
 from app.common.utils.enums.roles import Roles
 from app.common.config.db import db
-from models.usuarios import Usuarios
+from app.models.usuarios import Usuarios
 
 usuarios_user = Blueprint('usuarios_user', __name__)
 

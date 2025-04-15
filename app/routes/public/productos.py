@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from app.common.config.db import db
-from models.productos import Productos
-from models import Pedidos, PedidosProductos, Productos, Usuarios
+from app.models.productos import Productos
+from app.models import Pedidos, PedidosProductos, Productos, Usuarios
 
 productos_public = Blueprint("productos_public", __name__)
 

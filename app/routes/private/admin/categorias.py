@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from app.common.utils.auth import role_required
 from app.common.utils.enums.roles import Roles
 from app.common.config.db import db
-from models.categorias import Categorias
+from app.models.categorias import Categorias
 
 categorias_admin = Blueprint('categorias_admin', __name__)
 

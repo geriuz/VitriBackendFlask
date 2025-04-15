@@ -3,8 +3,8 @@ from flask_jwt_extended import jwt_required
 from app.common.utils.auth import role_required
 from app.common.utils.enums.roles import Roles
 from app.common.config.db import db
-from models.entradas import Entradas
-from models.productos import Productos
+from app.models.entradas import Entradas
+from app.models.productos import Productos
 
 entradas_admin = Blueprint('entradas_admin', __name__)
 

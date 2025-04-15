@@ -4,7 +4,7 @@ from app.common.utils.auth import role_required
 from app.common.utils.enums.roles import Roles
 from sqlalchemy.exc import IntegrityError
 from app.common.config.db import db
-from models.usuarios import Usuarios
+from app.models.usuarios import Usuarios
 
 usuarios_admin = Blueprint('usuarios_admin', __name__)
 
